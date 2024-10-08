@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="css/login.css">
+   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <form id="loginForm">
+     <div class="container">
+        <div class="left-panel">
+                <p class="title">Sign In</p>
+            
+                <div class="label">USERNAME</div>
+                <input class="input-field" type="text" id = "loginUsername"name="username" placeholder="Username" required>
+                <!-- <input type="text" id="loginUsername" placeholder="Username" required> -->
+                <div class="label">PASSWORD</div>
+                <input class="input-field" type="password" id = "loginPassword" name="password" placeholder="Password" required>
+                <!-- <input type="password" id="loginPassword" placeholder="Password" required> -->
+                <button type="submit" class="sign-in-btn">Sign in</button>
+                <a href="" class="forgot-password">Forgot Password</a>
+            </div>
+            
+            <div class="right-panel">
+                <p class="welcome-title">Welcome to GenSQL</p>
+                <p class="sign-up-text">Don't have an account?</p>
+                <a href="register.html" class="sign-up-btn">Sign Up</a>
+            </div>
+        </div>
+    </form>
+    <script src="js/login.js"></script>
+</body>
+</html>

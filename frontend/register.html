@@ -1,0 +1,77 @@
+<!-- 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>My App</title>
+</head>
+<body>
+    <div id="app">
+        <h1>User Management</h1>
+        <div id="registration">
+            <h2>Register</h2>
+            <form id="registerForm">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+        <div id="login">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Username" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body> -->
+<!-- </html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Page</title>
+    <link rel="stylesheet" href="css/register.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <form id="registerForm">
+        <div class="container">
+            <div class="left-panel">
+                <p class="title">Sign Up</p>
+                
+                <div id="error-messages" style="color: red; display: none;"></div>
+                
+                <div class="label">EMAIL</div>
+                <input class="input"type="email" id="email"  placeholder="Email" required>
+                
+                <div class="label">USERNAME</div>
+                <input class="input" type="text" id="username" placeholder="Username" required>
+                
+                <div class="label">PASSWORD</div>
+                <input class="input" type="password" id="password" placeholder="Password" required>
+                
+                <div class="label">CONFIRM PASSWORD</div>
+                <input class="input" type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                
+                <button type="submit" class="submit-btn">Sign Up</button>
+            </div>
+            <div class="right-panel">
+                <p class="welcome-title">Welcome to GenSQL</p>
+                <p class="sign-up-text">Already have an account?</p>
+                <a href="login.html" class="sign-in-button">Sign In</a>
+            </div>
+        </div>
+    </form>
+    <script src="js/register.js"></script>
+</body>
+</html>
