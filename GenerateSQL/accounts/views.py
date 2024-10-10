@@ -18,7 +18,7 @@ class GetUserView(APIView):
 
 def send_otp_email(otp, email):
     subject = "Verify your Email - {}".format(email)
-    message = "Your 4-digit OTP to verify your account is : " + str(otp) + ". Please don't share it with anyone else"
+    message = "Your 4-digit OTP for your account is : " + str(otp) + ". Please don't share it with anyone else"
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [email]
     send_mail(subject, message, email_from, recipient_list)
