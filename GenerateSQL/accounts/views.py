@@ -9,13 +9,6 @@ import random
 from .serializers import *
 from .models import User
 
-def send_otp_email(otp, email):
-    subject = "Verify your Email - {}".format(email)
-    print(otp)
-    message = "Your 4-digit OTP to verify your account is : " + str(otp) + ". Please don't share it with anyone else"
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = [email]
-    send_mail(subject, message, email_from, recipient_list)
 
 class GetUserView(APIView):
     def get(self,requests):
@@ -23,33 +16,47 @@ class GetUserView(APIView):
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 
+def send_otp_email(otp, email):
+    subject = "Verify your Email - {}".format(email)
+    message = "Your 4-digit OTP to verify your account is : " + str(otp) + ". Please don't share it with anyone else"
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [email]
+    send_mail(subject, message, email_from, recipient_list)
+
 class RegisterView(APIView):
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            # email = request.POST['email'].lower()
-            # request.session['otp'] = random.randint(1000, 9999)
-            # send_otp_email(request.session['otp'], email)
-            return Response({"succcess": "User created successfully. Check email for OTP."}, status=status.HTTP_201_CREATED)
+            otp = random.randint(1000, 9999)
+            email = serializer.validated_data['email']
+            
+            send_otp_email(otp, email)
+
+            return Response({"succcess": "OTP sent to your email.", "otp":otp}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class VerifyEmailView(APIView):
+class VerifyOTPView(APIView):
     def post(self, request):
-        serializer = EmailVerificationSerializer(data=request.data)
-        if serializer.is_valid():
-            email = serializer.validated_data['email']
-            otp = request.data.get('otp')
-            try:
-                user = User.objects.get(email=email)
-                if user.profile.otp == otp:
-                    user.is_active = True
-                    user.save()
-                    return Response({"message": "Email verified successfully."}, status=status.HTTP_200_OK)
-                return Response({"error": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
-            except User.DoesNotExist:
-                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if request.data.get('reset') == "false":
+            username = request.data.get('username')
+            email = request.data.get('email')
+            print("For account creation")
+
+        mainotp = request.data.get('otp')
+
+        if int(request.data.get('ogotp')) == int(mainotp):
+            if request.data.get('reset') == "false":
+                applicant = User.objects.create(
+                    username=username,
+                    email=email,
+                    password=request.data.get('password')
+                )
+            else:
+                return Response({"message": "Reset link activate"}, status=status.HTTP_201_CREATED)
+
+            return Response({"message": "User created and verified successfully."}, status=status.HTTP_201_CREATED)
+
+        return Response({"error": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
     def post(self, request):
@@ -78,18 +85,10 @@ class ForgotPasswordView(APIView):
         if serializer.is_valid():
             email = serializer.validated_data['email']
             try:
-                user = User.objects.get(email=email)
                 otp = random.randint(1000, 9999)
-                user.profile.otp = otp
-                user.profile.save()
-                send_mail(
-                    'Password Reset OTP',
-                    f'Your OTP is {otp}',
-                    'from@example.com',
-                    [user.email],
-                    fail_silently=False,
-                )
-                return Response({"message": "OTP sent to email."}, status=status.HTTP_200_OK)
+                
+                send_otp_email(otp, email)
+                return Response({"message": "OTP sent to email.","otp":otp}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
                 return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -99,14 +98,11 @@ class ResetPasswordView(APIView):
         serializer = SetNewPasswordSerializer(data=request.data)
         if serializer.is_valid():
             email = request.data.get('email')
-            otp = request.data.get('otp')
-            try:
-                user = User.objects.get(email=email)
-                if user.profile.otp == otp:
-                    user.set_password(serializer.validated_data['password'])
-                    user.save()
-                    return Response({"message": "Password reset successful."}, status=status.HTTP_200_OK)
-                return Response({"error": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
-            except User.DoesNotExist:
+            user = User.objects.filter(email = email).first()
+            if user:
+                user.set_password(serializer.validated_data['password'])
+                user.save()
+                return Response({"message": "Password reset successful."}, status=status.HTTP_200_OK)
+            else:
                 return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

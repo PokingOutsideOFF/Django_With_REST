@@ -6,6 +6,9 @@ class User(models.Model):
     username = models.CharField(max_length=15, unique=True)
     email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=250)
+
+    def set_password(self, raw_password):
+        self.password = raw_password 
     
     def save(self, *args, **kwargs):
     # Hash the password before saving

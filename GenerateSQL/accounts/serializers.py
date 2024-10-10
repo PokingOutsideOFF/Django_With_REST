@@ -26,14 +26,13 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"email": "User with that email already exists."})
 
         return data
-
+    
     def create(self, validated_data):
-        # Create a new user without the confirm_password field
-        validated_data.pop('confirm_password')  # Remove confirm_password from validated_data
-        user = User(**validated_data)  # Use unpacking to create a new user
-        user.save()  # Call the save method which hashes the password
-        return user
-
+            # Create a new user without the confirm_password field
+            validated_data.pop('confirm_password')  # Remove confirm_password from validated_data
+            user = User(**validated_data)  # Use unpacking to create a new user
+            user.save()  # Call the save method which hashes the password
+            return user
 
 
 class LoginSerializer(serializers.Serializer):
@@ -42,18 +41,20 @@ class LoginSerializer(serializers.Serializer):
 
 class EmailVerificationSerializer(serializers.Serializer):
     email = serializers.EmailField()
+    
 
 class ResetPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
 class SetNewPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
 
-    def validate(self, attrs):
-        if attrs['password'] != attrs['confirm_password']:
+    def validate(self, data):
+        if data['password'] != data['confirm_password']:
             raise serializers.ValidationError({"password": "Passwords do not match."})
-        return attrs
+        return data
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Query Generator</title>
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="nav-left">
+            <img src="images/database.png" alt="Logo" class="logo"> <!-- Replace with actual logo -->
+            <h2>GenSQL</h2>
+        </div>
+        <div class="nav-right">
+            <a href="#">Home</a>
+            <a href="#">Chat History</a>
+            <a href="#">Logout</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <h1 class="centered-heading">Generating SQL using Text Prompt</h1>
+
+
+     <div class="input-container">
+        <div class="upload-buttons">
+            <select id="database-select" name="database" class="select-database">
+                <option selected disabled>Select SQL Server</option> <!-- Default option inside the select box -->
+                <option value="SQL">MSSQL</option>
+                <option value="MySQL">MySQL</option>
+                <option value="PostgreSQL">PostgreSQL</option>
+            </select>
+    
+            <!-- CSV Upload Form -->
+            <form method="post" enctype="multipart/form-data" action="upload_csv">
+                <label for="csv-file" id="csv-label" class="upload-btn">Upload CSV File</label>
+                <input type="file" id="csv-file" name="csvfile" accept=".csv" style="display: none;">
+                <button type="submit" class="submit-btn">Submit CSV</button>
+            </form>
+    
+            <!-- Excel Upload Form -->
+            <form method="post" enctype="multipart/form-data" action="upload_excel">
+                <label id="excel-label" for="excel-file" class="upload-btn">Upload Excel File</label>
+                <input type="file" id="excel-file" name="excelfile" accept=".xlsx,.xls" style="display: none;">
+                <button type="submit" class="submit-btn">Submit Excel</button>
+            </form>
+        </div>
+    
+    </div>
+    
+
+    <!-- Text Input for Query -->
+    <textarea id="input-prompt" placeholder="Enter your query or prompt here..." rows="6" cols="50" class="text-input"></textarea>
+
+    <!-- Generate Query Button -->
+    <button class="generate-btn">Generate Query</button>
+
+    <!-- Generated SQL Query -->
+    <h3>Generated SQL Query:</h3>
+
+    <div style="position: relative;">
+        <textarea id="generated-query" class="generated-query" rows="6" cols="50" readonly>Select * FROM ...</textarea>
+        <span class="copy-icon" onclick="copyToClipboard('generated-query')" style="position: absolute; right: 10px; top: 5px;">📋</span> <!-- Copy icon -->
+    </div>
+
+    <script src="js/home.js">
+       
+    </script>
+</body>
+</html>

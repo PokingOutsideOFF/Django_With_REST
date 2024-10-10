@@ -144,3 +144,7 @@ EMAIL_HOST_PASSWORD = 'elzhyohnwexzzfxt'
 #     ),
 #     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler'
 # }
+
+
+SESSION_COOKIE_AGE = 1209600  
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Ensure you're using the correct session backend

@@ -56,6 +56,8 @@
 document.getElementById("registerForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
+    // const csrftoken = getCookie('csrftoken'); // Retrieve the CSRF token
+
     const username = document.getElementById("username").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -65,6 +67,7 @@ document.getElementById("registerForm").addEventListener("submit", function (e) 
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            //   "X-CSRFToken": csrftoken, 
         },
         body: JSON.stringify({
             username: username,
@@ -85,10 +88,15 @@ document.getElementById("registerForm").addEventListener("submit", function (e) 
         }
     })
     .then(data => {
-        console.log("Success:", data);
-        alert("User registered successfully. Check your email for OTP.");
+        console.log("Success:", data)
+        sessionStorage.setItem("email", email); 
+        sessionStorage.setItem("username", username); 
+        sessionStorage.setItem("password", password); 
+        sessionStorage.setItem("verifyotp", data.otp);
+        location.href = "otp.html";  // Change this to the path you want to redirect to
+        
+        alert("Check your email for OTP.");
         // Redirect after successful registration
-        window.location.href = "/login";  // Change this to the path you want to redirect to
     })
     .catch(error => {
         console.error("Error:", error);
@@ -119,4 +127,19 @@ document.getElementById("registerForm").addEventListener("submit", function (e) 
         alert(alertMessage.trim()); // Show all errors in a single alert
     });
 });
+
+// function getCookie(name) {
+//     let cookieValue = null;
+//     if (document.cookie && document.cookie !== '') {
+//         const cookies = document.cookie.split(';');
+//         for (let i = 0; i < cookies.length; i++) {
+//             const cookie = cookies[i].trim();
+//             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+//                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+//                 break;
+//             }
+//         }
+//     }
+//     return cookieValue;
+// }
 

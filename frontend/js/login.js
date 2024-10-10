@@ -1,6 +1,5 @@
 document.getElementById("loginForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    console.log("Form submitted"); 
 
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
@@ -15,21 +14,24 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
             password: password,
         }),
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Login failed");
-            }
-            return response.json();
-        })
-        .then(data => {
-        console.log("Success:", data);
-        alert("Logged in");
-        // Redirect after successful registration
-        window.location.href = "/login";  // Change this to the path you want to redirect to
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Login failed");
+        }
+        return response.json();
     })
-        .catch((error) => {
-            console.error("Error:", error);
-            alert("Login failed. Please check your credentials.");
-        });
+    .then(data => {
+        console.log("Success:", data);
+        sessionStorage.setItem("isLoggedIn", "true");
+        location.href = 'home.html';
+        history.replaceState(null, '', 'home.html');
+        alert('Logged in');
+        
+        
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        alert("Login failed. Please check your credentials.");
+    });
 });
 
